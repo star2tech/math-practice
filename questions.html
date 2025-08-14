@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Math Questions</title>
+    <link rel="stylesheet" href="mathstyle.css">
+</head>
+<body>
+    <h1>Math Questions</h1>
+    <div id="questions"></div>
+    <script>
+    // Get topic from localStorage
+    const topic = localStorage.getItem("mathTopic");
+    if (topic) {
+        fetch("http://localhost:3000/ask", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ topic: `Give me 5 math questions about ${topic}. Only list the questions, no answers.` })
+        })
+        .then(res => res.json())
+        .then(data => {
+            document.getElementById("questions").innerHTML =
+                `<h2>Questions for: ${topic}</h2><p>${data.answer.replace(/\n/g, "<br>")}</p>`;
+        });
+    } else {
+        document.getElementById("questions").textContent = "No topic selected.";
+    }
+    </script>
+</body>
+</html>
